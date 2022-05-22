@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InAndOut.Migrations
 {
     [DbContext(typeof(ApplicationDbContex))]
-    [Migration("20220521221816_expensesMigration")]
-    partial class expensesMigration
+    [Migration("20220522151436_addExpenseAll")]
+    partial class addExpenseAll
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,9 +34,30 @@ namespace InAndOut.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ExpensesCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ExpensesCategoryId");
+
                     b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("InAndOut.Models.ExpensesCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("expensesCategory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExpensesCategory");
                 });
 
             modelBuilder.Entity("InAndOut.Models.Item", b =>
@@ -58,6 +79,17 @@ namespace InAndOut.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("InAndOut.Models.Expense", b =>
+                {
+                    b.HasOne("InAndOut.Models.ExpensesCategory", "ExpensesCategory")
+                        .WithMany()
+                        .HasForeignKey("ExpensesCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExpensesCategory");
                 });
 #pragma warning restore 612, 618
         }

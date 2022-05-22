@@ -1,51 +1,42 @@
 ﻿using InAndOut.Data;
 using InAndOut.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace InAndOut.Controllers
 {
-    public class ExpensesController : Controller
+    public class ExpensesCategoryController : Controller
     {
-        private readonly ApplicationDbContex _db;
+        public readonly ApplicationDbContex _db;
 
-        public ExpensesController(ApplicationDbContex db)
+        public ExpensesCategoryController(ApplicationDbContex db)
         {
             _db = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Expense> objList = _db.Expenses;
+            IEnumerable<ExpensesCategory> objList = _db.ExpensesCategory;
             return View(objList);
         }
 
         //GET - Create
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> CategoryDropDown = _db.ExpensesCategory.Select(i => new SelectListItem
-            {
-                Text = i.expensesCategory,
-                Value = i.Id.ToString()
-            });
-
-            ViewBag.CategoryDropDown = CategoryDropDown;
-
             return View();
         }
 
         //POST - Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Expense obj)
+        public IActionResult Create(ExpensesCategory obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Expenses.Add(obj);
+                _db.ExpensesCategory.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
+
             }
             return View(obj);
         }
@@ -53,11 +44,11 @@ namespace InAndOut.Controllers
         //GET - Delete
         public IActionResult Delete(int? id)
         {
-            if(id == null || id == 0)
-                {
-                    return NotFound();
-                }
-            var obj = _db.Expenses.Find(id);
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var obj = _db.ExpensesCategory.Find(id);
             if (obj == null)
             {
                 return NotFound();
@@ -70,13 +61,13 @@ namespace InAndOut.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var obj = _db.Expenses.Find(id);
-            if(obj == null)
+            var obj = _db.ExpensesCategory.Find(id);
+            if (obj == null)
             {
                 return NotFound();
             }
 
-            _db.Expenses.Remove(obj);
+            _db.ExpensesCategory.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -88,7 +79,7 @@ namespace InAndOut.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Expenses.Find(id);
+            var obj = _db.ExpensesCategory.Find(id);
             if (obj == null)
             {
                 return NotFound();
@@ -99,16 +90,17 @@ namespace InAndOut.Controllers
         //POST - Update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Expense obj)
+        public IActionResult Update(ExpensesCategory obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Expenses.Update(obj);
+                _db.ExpensesCategory.Update(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
 
             }
             return View(obj);
         }
+
     }
 }
