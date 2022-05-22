@@ -1,0 +1,43 @@
+﻿@model InAndOut.Models.Expense
+
+<form method="post" asp-action="Create">
+    <div class="border p-3">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Dodaj wydatek</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label asp-for="ExpenseName"></label>
+                    </div>
+                    <div class="col-6">
+                        <label asp-for="Amount"></label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <input asp-for="ExpenseName" class="form-control" />
+                        <span asp-validation-for="ExpenseName" class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                </div>
+                <div  class="form-group text-right">
+                              <input type="submit" class="btn btn-outline-info mx-1" style="width:75px" value="Dodaj" />
+                              <a asp-action="Index" class="btn btn-outline-danger mx-1" style="width:75px">Wstecz</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts{
+    @{ <partial name="_ValidationScriptsPartial"/>}
+}
